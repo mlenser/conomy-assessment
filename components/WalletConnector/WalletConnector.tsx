@@ -1,15 +1,19 @@
 import { useWeb3React } from '@web3-react/core';
-import { useCallback, useEffect } from 'react';
+import { useCallback, useState } from 'react';
 import { injected } from './connectors';
 import styles from './WalletConnector.module.css';
 
+const ETH_AMOUNT_FOR_DEMO = 1000000000000000;
+
 export const WalletConnector = () => {
-  const { active, account, activate, deactivate } = useWeb3React();
+  const { active, account, activate, chainId, deactivate, library } =
+    useWeb3React();
+  const [showChainId, setShowChainId] = useState(false);
+  const [accountBalance, setAccountBalance] = useState(0);
 
   const connect = useCallback(async () => {
     try {
       await activate(injected);
-      localStorage.setItem('isWalletConnected', 'true');
     } catch (error) {
       console.log(error);
     }
@@ -18,38 +22,50 @@ export const WalletConnector = () => {
   const disconnect = useCallback(async () => {
     try {
       await deactivate();
-      localStorage.setItem('isWalletConnected', 'false');
     } catch (error) {
       console.log(error);
     }
   }, [deactivate]);
 
-  useEffect(() => {
-    const connectWalletOnPageLoad = async () => {
-      if (localStorage?.getItem('isWalletConnected') === 'true') {
-        await connect();
-      }
-    };
-    connectWalletOnPageLoad();
-  }, [connect]);
+  const getBalance = () => {
+    library.eth
+      .getBalance(account)
+      .then((balance: number) => setAccountBalance(balance));
+  };
+
+  const sendTransaction = () => {
+    library.eth.sendTransaction({
+      from: account,
+      to: account,
+      value: ETH_AMOUNT_FOR_DEMO,
+    });
+  };
 
   return (
     <div>
       {active ? (
         <>
-          <div>
-            Connected with <b>{account}</b>
+          <div className={styles.buttonGroup}>
+            <button onClick={() => setShowChainId(true)}>Get chain ID</button>
+            <button onClick={getBalance}>Get balance</button>
+            <button onClick={sendTransaction}>Send transaction</button>
+            <button onClick={disconnect}>Disconnect</button>
+          </div>
+
+          <div className={styles.dataGroup}>
+            <div>
+              {showChainId && chainId ? <div>Chain ID: {chainId}</div> : null}
+            </div>
+            <div>
+              {accountBalance ? <div>Balance: {accountBalance}</div> : null}
+            </div>
           </div>
         </>
-      ) : null}
-      <div>
-        <button
-          className={styles.button}
-          onClick={active ? disconnect : connect}
-        >
-          {active ? 'Disconnect' : 'Connect to MetaMask'}
-        </button>
-      </div>
+      ) : (
+        <div className={styles.buttonGroup}>
+          <button onClick={connect}>Connect to MetaMask</button>
+        </div>
+      )}
     </div>
   );
 };

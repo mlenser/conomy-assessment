@@ -1,3 +1,15 @@
-.button {
+.buttonGroup {
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-top: 2rem;
+}
+
+.dataGroup {
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
   margin-top: 2rem;
 }
