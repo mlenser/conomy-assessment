@@ -1,7 +1,8 @@
 import { useWeb3React } from '@web3-react/core';
+import { AbstractConnector } from '@web3-react/abstract-connector';
 import { useCallback, useState } from 'react';
 import { Button } from '../Button/Button';
-import { injected } from './connectors';
+import { coinbaseWallet, genericWallet, metamaskWallet } from './connectors';
 import styles from './Wallet.module.css';
 
 const ETH_AMOUNT_FOR_DEMO = 1000000000000000;
@@ -12,17 +13,22 @@ export const Wallet = () => {
   const [showChainId, setShowChainId] = useState(false);
   const [accountBalance, setAccountBalance] = useState(0);
 
-  const connect = useCallback(async () => {
-    try {
-      await activate(injected);
-    } catch (error) {
-      console.log(error);
-    }
-  }, [activate]);
+  const connect = useCallback(
+    async (connector: AbstractConnector) => {
+      try {
+        await activate(connector);
+      } catch (error) {
+        console.log(error);
+      }
+    },
+    [activate],
+  );
 
   const disconnect = useCallback(async () => {
     try {
       await deactivate();
+      setShowChainId(false);
+      setAccountBalance(0);
     } catch (error) {
       console.log(error);
     }
@@ -65,9 +71,21 @@ export const Wallet = () => {
   }
 
   return (
-    <div className={styles.buttonGroup}>
+    <div className={styles.group}>
       <div>
-        <Button onClick={connect}>Connect to MetaMask</Button>
+        <Button onClick={() => connect(metamaskWallet)}>
+          Connect to MetaMask
+        </Button>
+      </div>
+      <div>
+        <Button onClick={() => connect(coinbaseWallet)}>
+          Connect to Coinbase
+        </Button>
+      </div>
+      <div>
+        <Button onClick={() => connect(genericWallet)}>
+          Connect to another wallet
+        </Button>
       </div>
     </div>
   );
