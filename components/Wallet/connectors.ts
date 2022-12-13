@@ -16,7 +16,5 @@ export const coinbaseWallet = new WalletLinkConnector({
 export const genericWallet = new WalletConnectConnector({
   bridge: 'https://bridge.walletconnect.org',
   qrcode: true,
-  // TODO: investigate the API of this. The docs are sparse.
-  // @ts-ignore
   rpcUrl: `${baseUrl}/${process.env.INFURA_KEY}`,
 });
