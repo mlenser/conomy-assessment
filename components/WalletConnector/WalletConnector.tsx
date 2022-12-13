@@ -1,5 +1,6 @@
 import { useWeb3React } from '@web3-react/core';
 import { useCallback, useState } from 'react';
+import { Button } from '../Button/Button';
 import { injected } from './connectors';
 import styles from './WalletConnector.module.css';
 
@@ -27,6 +28,7 @@ export const WalletConnector = () => {
     }
   }, [deactivate]);
 
+  // TODO: show a loading state
   const getBalance = () => {
     library.eth
       .getBalance(account)
@@ -41,31 +43,32 @@ export const WalletConnector = () => {
     });
   };
 
-  return (
-    <div>
-      {active ? (
-        <>
-          <div className={styles.buttonGroup}>
-            <button onClick={() => setShowChainId(true)}>Get chain ID</button>
-            <button onClick={getBalance}>Get balance</button>
-            <button onClick={sendTransaction}>Send transaction</button>
-            <button onClick={disconnect}>Disconnect</button>
-          </div>
-
-          <div className={styles.dataGroup}>
-            <div>
-              {showChainId && chainId ? <div>Chain ID: {chainId}</div> : null}
-            </div>
-            <div>
-              {accountBalance ? <div>Balance: {accountBalance}</div> : null}
-            </div>
-          </div>
-        </>
-      ) : (
-        <div className={styles.buttonGroup}>
-          <button onClick={connect}>Connect to MetaMask</button>
+  if (active) {
+    return (
+      <div className={styles.group}>
+        <div className={styles.actionAndData}>
+          <Button onClick={() => setShowChainId(true)}>Get chain ID</Button>
+          {showChainId && chainId ? <div>Chain ID: {chainId}</div> : null}
         </div>
-      )}
+        <div className={styles.actionAndData}>
+          <Button onClick={getBalance}>Get balance</Button>
+          {accountBalance ? <div>Balance: {accountBalance}</div> : null}
+        </div>
+        <div>
+          <Button onClick={sendTransaction}>Send transaction</Button>
+        </div>
+        <div>
+          <Button onClick={disconnect}>Disconnect</Button>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className={styles.buttonGroup}>
+      <div>
+        <Button onClick={connect}>Connect to MetaMask</Button>
+      </div>
     </div>
   );
 };

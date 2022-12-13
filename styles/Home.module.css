@@ -1,21 +1,13 @@
-.container {
-  padding-left: 2rem;
-  padding-right: 2rem;
-}
-
 .main {
-  align-items: center;
   display: flex;
   flex-direction: column;
   min-height: 100vh;
+  padding-left: 2rem;
+  padding-right: 2rem;
 }
 
 .title {
   margin: 0;
   line-height: 1.15;
   font-size: 4rem;
-}
-
-.title {
-  text-align: center;
 }

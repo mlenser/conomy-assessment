@@ -3,6 +3,7 @@ import { provider } from 'web3-core';
 import { Web3ReactProvider } from '@web3-react/core';
 import Web3 from 'web3';
 import '../styles/globals.css';
+import 'node_modules/modern-normalize/modern-normalize.css';
 
 const getLibrary = (provider: provider) => new Web3(provider);
 

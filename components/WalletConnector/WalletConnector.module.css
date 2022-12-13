@@ -1,15 +1,13 @@
-.buttonGroup {
-  align-items: center;
+.group {
   display: flex;
   flex-direction: column;
   gap: 1rem;
   margin-top: 2rem;
+  max-width: 20rem;
 }
 
-.dataGroup {
+.actionAndData {
   align-items: center;
   display: flex;
-  flex-direction: column;
-  gap: 1rem;
-  margin-top: 2rem;
+  justify-content: space-between;
 }

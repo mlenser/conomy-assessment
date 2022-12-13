@@ -3,7 +3,7 @@ import { WalletConnector } from '../components/WalletConnector';
 import styles from '../styles/Home.module.css';
 
 const Home = () => (
-  <div className={styles.container}>
+  <>
     <Head>
       <title>conomy assessment</title>
       <link rel="icon" href="/favicon.ico" />
@@ -14,7 +14,7 @@ const Home = () => (
 
       <WalletConnector />
     </main>
-  </div>
+  </>
 );
 
 export default Home;
