@@ -1,0 +1,10 @@
+.cache
+node_modules
+public
+dist
+build
+coverage
+old
+src/__generated__
+src/static/data/changelog
+

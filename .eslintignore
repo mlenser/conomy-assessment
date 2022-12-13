@@ -1,0 +1,9 @@
+.cache
+node_modules
+public
+dist
+build
+coverage
+old
+src/static
+src/__generated__
