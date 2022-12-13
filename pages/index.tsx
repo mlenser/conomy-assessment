@@ -1,5 +1,5 @@
 import Head from 'next/head';
-import { WalletConnector } from '../components/WalletConnector';
+import { Wallet } from '../components/Wallet';
 import styles from '../styles/Home.module.css';
 
 const Home = () => (
@@ -12,7 +12,7 @@ const Home = () => (
     <main className={styles.main}>
       <h1 className={styles.title}>conomy assessment</h1>
 
-      <WalletConnector />
+      <Wallet />
     </main>
   </>
 );

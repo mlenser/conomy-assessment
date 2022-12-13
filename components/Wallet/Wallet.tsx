@@ -2,11 +2,11 @@ import { useWeb3React } from '@web3-react/core';
 import { useCallback, useState } from 'react';
 import { Button } from '../Button/Button';
 import { injected } from './connectors';
-import styles from './WalletConnector.module.css';
+import styles from './Wallet.module.css';
 
 const ETH_AMOUNT_FOR_DEMO = 1000000000000000;
 
-export const WalletConnector = () => {
+export const Wallet = () => {
   const { active, account, activate, chainId, deactivate, library } =
     useWeb3React();
   const [showChainId, setShowChainId] = useState(false);
