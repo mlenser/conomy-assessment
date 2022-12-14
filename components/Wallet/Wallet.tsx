@@ -26,6 +26,7 @@ export const Wallet = () => {
   const { active, account, activate, chainId, deactivate, library } =
     useWeb3React();
   const [showChainId, setShowChainId] = useState(false);
+  const [showAccountBalance, setShowAccountBalance] = useState(false);
   const [accountBalance, setAccountBalance] = useState(0);
 
   const connect = useCallback(
@@ -52,6 +53,12 @@ export const Wallet = () => {
     }
   }, [deactivate]);
 
+  const getBalance = useCallback(() => {
+    library?.eth
+      .getBalance(account)
+      .then((balance: number) => setAccountBalance(balance));
+  }, [account, library?.eth]);
+
   useEffect(() => {
     const connectedWallet = localStorage?.getItem(
       LOCAL_STORAGE_WALLET_VARIABLE_NAME,
@@ -66,12 +73,9 @@ export const Wallet = () => {
     }
   }, [connect]);
 
-  // TODO: show a loading state
-  const getBalance = () => {
-    library.eth
-      .getBalance(account)
-      .then((balance: number) => setAccountBalance(balance));
-  };
+  useEffect(() => {
+    getBalance();
+  }, [chainId, getBalance]);
 
   const sendTransaction = () => {
     library.eth.sendTransaction({
@@ -89,8 +93,17 @@ export const Wallet = () => {
           {showChainId && chainId ? <div>Chain ID: {chainId}</div> : null}
         </div>
         <div className={styles.actionAndData}>
-          <Button onClick={getBalance}>Get balance</Button>
-          {accountBalance ? <div>Balance: {accountBalance}</div> : null}
+          <Button
+            onClick={() => {
+              setShowAccountBalance(true);
+              getBalance();
+            }}
+          >
+            Get balance
+          </Button>
+          {showAccountBalance && accountBalance ? (
+            <div>Balance: {accountBalance}</div>
+          ) : null}
         </div>
         <div>
           <Button onClick={sendTransaction}>Send transaction</Button>
