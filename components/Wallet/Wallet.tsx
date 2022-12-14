@@ -1,11 +1,26 @@
 import { useWeb3React } from '@web3-react/core';
 import { AbstractConnector } from '@web3-react/abstract-connector';
-import { useCallback, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { Button } from '../Button/Button';
 import { coinbaseWallet, genericWallet, metamaskWallet } from './connectors';
 import styles from './Wallet.module.css';
 
+type WalletType = 'metamask' | 'coinbase' | 'generic';
+
+const LOCAL_STORAGE_WALLET_VARIABLE_NAME = 'conomy-assessment-wallet';
 const ETH_AMOUNT_FOR_DEMO = 1000000000000000;
+
+const getConnectorFromWalletType = (
+  walletType: WalletType,
+): AbstractConnector => {
+  if (walletType === 'coinbase') {
+    return coinbaseWallet;
+  }
+  if (walletType === 'metamask') {
+    return metamaskWallet;
+  }
+  return genericWallet;
+};
 
 export const Wallet = () => {
   const { active, account, activate, chainId, deactivate, library } =
@@ -14,9 +29,11 @@ export const Wallet = () => {
   const [accountBalance, setAccountBalance] = useState(0);
 
   const connect = useCallback(
-    async (connector: AbstractConnector) => {
+    async (walletType: WalletType) => {
       try {
+        const connector = getConnectorFromWalletType(walletType);
         await activate(connector);
+        localStorage.setItem(LOCAL_STORAGE_WALLET_VARIABLE_NAME, walletType);
       } catch (error) {
         console.log(error);
       }
@@ -27,12 +44,27 @@ export const Wallet = () => {
   const disconnect = useCallback(async () => {
     try {
       await deactivate();
+      localStorage.removeItem(LOCAL_STORAGE_WALLET_VARIABLE_NAME);
       setShowChainId(false);
       setAccountBalance(0);
     } catch (error) {
       console.log(error);
     }
   }, [deactivate]);
+
+  useEffect(() => {
+    const connectedWallet = localStorage?.getItem(
+      LOCAL_STORAGE_WALLET_VARIABLE_NAME,
+    );
+    if (
+      connectedWallet &&
+      (connectedWallet === 'generic' ||
+        connectedWallet === 'coinbase' ||
+        connectedWallet === 'metamask')
+    ) {
+      connect(connectedWallet);
+    }
+  }, [connect]);
 
   // TODO: show a loading state
   const getBalance = () => {
@@ -73,17 +105,13 @@ export const Wallet = () => {
   return (
     <div className={styles.group}>
       <div>
-        <Button onClick={() => connect(metamaskWallet)}>
-          Connect to MetaMask
-        </Button>
+        <Button onClick={() => connect('metamask')}>Connect to MetaMask</Button>
       </div>
       <div>
-        <Button onClick={() => connect(coinbaseWallet)}>
-          Connect to Coinbase
-        </Button>
+        <Button onClick={() => connect('coinbase')}>Connect to Coinbase</Button>
       </div>
       <div>
-        <Button onClick={() => connect(genericWallet)}>
+        <Button onClick={() => connect('generic')}>
           Connect to another wallet
         </Button>
       </div>
