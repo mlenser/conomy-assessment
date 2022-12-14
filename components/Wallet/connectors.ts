@@ -4,8 +4,20 @@ import { WalletLinkConnector } from '@web3-react/walletlink-connector';
 
 const baseUrl = 'https://mainnet.infura.io/v3';
 
+const ETHEREUM_MAINNET_CHAIN_ID = 1;
+const ROPSTEN_CHAIN_ID = 3;
+const RINKEBY_CHAIN_ID = 4;
+const GOERLI_CHAIN_ID = 5;
+const KOVAN_CHAIN_ID = 42;
+
 export const metamaskWallet = new InjectedConnector({
-  supportedChainIds: [1, 3, 4, 5, 42],
+  supportedChainIds: [
+    ETHEREUM_MAINNET_CHAIN_ID,
+    ROPSTEN_CHAIN_ID,
+    RINKEBY_CHAIN_ID,
+    GOERLI_CHAIN_ID,
+    KOVAN_CHAIN_ID,
+  ],
 });
 
 export const coinbaseWallet = new WalletLinkConnector({
