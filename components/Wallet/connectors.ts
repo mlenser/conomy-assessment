@@ -8,7 +8,11 @@ const ETHEREUM_MAINNET_CHAIN_ID = 1;
 const ROPSTEN_CHAIN_ID = 3;
 const RINKEBY_CHAIN_ID = 4;
 const GOERLI_CHAIN_ID = 5;
+const OPTIMISM_CHAIN_ID = 10;
 const KOVAN_CHAIN_ID = 42;
+const POLYGON_MAINNET_CHAIN_ID = 137;
+const ARBITRUM_ONE_CHAIN_ID = 42161;
+const AURORA_MAINNET_CHAIN_ID = 1313161554;
 
 export const metamaskWallet = new InjectedConnector({
   supportedChainIds: [
@@ -16,7 +20,11 @@ export const metamaskWallet = new InjectedConnector({
     ROPSTEN_CHAIN_ID,
     RINKEBY_CHAIN_ID,
     GOERLI_CHAIN_ID,
+    OPTIMISM_CHAIN_ID,
     KOVAN_CHAIN_ID,
+    POLYGON_MAINNET_CHAIN_ID,
+    ARBITRUM_ONE_CHAIN_ID,
+    AURORA_MAINNET_CHAIN_ID,
   ],
 });
 
